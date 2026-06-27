@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For My Love ❤️</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:linear-gradient(-45deg,#ff4d6d,#ff758f,#ff8fa3,#ffb3c1);
+background-size:400% 400%;
+animation:bg 10s ease infinite;
+overflow:hidden;
+}
+
+@keyframes bg{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
+}
+
+.container{
+width:90%;
+max-width:700px;
+background:rgba(255,255,255,.15);
+backdrop-filter:blur(10px);
+padding:30px;
+border-radius:20px;
+text-align:center;
+color:white;
+box-shadow:0 0 20px rgba(0,0,0,.2);
+}
+
+h1{
+font-size:42px;
+margin-bottom:20px;
+}
+
+.message{
+font-size:22px;
+line-height:1.8;
+margin-bottom:25px;
+}
+
+button{
+border:none;
+padding:12px 25px;
+font-size:18px;
+cursor:pointer;
+border-radius:10px;
+margin:5px;
+}
+
+.accept{
+background:#28a745;
+color:white;
+}
+
+.decline{
+background:#dc3545;
+color:white;
+}
+
+textarea{
+width:100%;
+height:120px;
+padding:10px;
+border-radius:10px;
+border:none;
+margin-top:20px;
+font-size:16px;
+}
+
+.submit{
+background:#ffffff;
+color:#ff4d6d;
+font-weight:bold;
+margin-top:15px;
+}
+
+#status{
+margin-top:15px;
+font-weight:bold;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>For My Love ❤️</h1>
+
+<div class="message">
+Priyo tumi amar sei bhalobasa jake pele ami amar ar kichui lagbe na.
+<br><br>
+I LOVE YOU ❤️
+</div>
+
+<button class="accept" onclick="selectChoice('Accept')">
+Accept 💚
+</button>
+
+<button class="decline" onclick="selectChoice('Decline')">
+Decline ❤️
+</button>
+
+<textarea id="msg"
+placeholder="Write your message here..."></textarea>
+
+<button class="submit" onclick="submitReply()">
+Send Message 📩
+</button>
+
+<div id="status"></div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+getFirestore,
+collection,
+addDoc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+
+apiKey: "YOUR_API_KEY",
+authDomain: "YOUR_PROJECT.firebaseapp.com",
+projectId: "YOUR_PROJECT_ID",
+storageBucket: "YOUR_PROJECT.appspot.com",
+messagingSenderId: "XXXXXXX",
+appId: "XXXXXXX"
+
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+let choice = "";
+
+window.selectChoice = function(type){
+choice = type;
+document.getElementById("status").innerText =
+"Selected: " + type;
+}
+
+window.submitReply = async function(){
+
+const message =
+document.getElementById("msg").value;
+
+if(choice===""){
+alert("Please select Accept or Decline");
+return;
+}
+
+try{
+
+await addDoc(collection(db,"responses"),{
+choice:choice,
+message:message,
+time:new Date().toISOString()
+});
+
+document.getElementById("status").innerText =
+"Message Sent ❤️";
+
+document.getElementById("msg").value="";
+
+}
+catch(err){
+alert(err.message);
+}
+
+}
+
+</script>
+
+</body>
+</html>
